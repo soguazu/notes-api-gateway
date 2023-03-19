@@ -1,24 +1,47 @@
+import path from 'path';
+require('dotenv').config({
+  path: process.env.ENV_PATH || path.resolve(__dirname, '..', '.env'),
+});
+
 import express, { json, urlencoded } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import routes from './routes';
+import router from './routes/v1';
 import { logger } from './helper';
+import HttpError from './helper/httpError';
 
-
-const PORT = Number(process.env.PORT) || 5001;
+const PORT = Number(process.env.PORT) || 30000;
 const app = express();
 
 // run cron job
 
 app.use(cors());
-app.use(json());
+// CORS pre-flight
+app.options('*', cors());
+
+app.use(json({ limit: '50mb' }));
 app.use(urlencoded({ extended: true }));
-app.use(morgan('combined', { stream: logger.stream }));
 
+if (process.env.NODE_ENV !== 'test') {
+  app.use(morgan('combined', { stream: logger.stream }));
+}
+
+// Remove some header info
+app.disable('x-powered-by');
+
+// Handle Errors
 app.use((err, req, res, next) => {
-  logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  logger.error(
+    `${err.status || 500} - ${err.message} - ${req.originalUrl} - ${
+      req.method
+    } - ${req.ip}`
+  );
 
-  res.status(500).send('server error, this will be resolved shortly!');
+  if (err.name === 'HttpError') {
+    return err.getErrorResponse(res);
+  }
+
+  res.status(500).json({ success: false, error: 'An error occurred' });
 
   next();
 });
@@ -27,10 +50,10 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome to Cocoons Letters Limited');
 });
 
-app.use('/api/v1', routes);
+router(app, '/v1/');
 
 app.use('*', (request, response) => {
-  response.status(404).send('Not Found');
+  response.status(404).send({ success: false, error: 'Path not found' });
 });
 
 app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
