@@ -19,5 +19,5 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build -t notes.azurecr.io/user-magt:${{ github.sha }} .
-          docker push notes.azurecr.io/user-magt:${{ github.sha }}
+          docker build -t notes.azurecr.io/api-gateway:${{ github.sha }} .
+          docker push notes.azurecr.io/api-gateway:${{ github.sha }}
