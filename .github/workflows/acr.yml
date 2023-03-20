@@ -1,0 +1,23 @@
+name: Containerize the application and push to acr
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/docker-login@v1
+        with:
+          login-server: notes.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build -t notes.azurecr.io/user-magt:${{ github.sha }} .
+          docker push notes.azurecr.io/user-magt:${{ github.sha }}
