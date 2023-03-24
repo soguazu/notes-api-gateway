@@ -16,10 +16,10 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   enums: String,
   arrays: true,
 });
-
+console.log(process.env.USER_SERVICE, '@@@');
 const userProto = grpc.loadPackageDefinition(packageDefinition).user;
 const client = new userProto.UserService(
-  'localhost:30001',
+  'api2:30001',
   grpc.credentials.createInsecure()
 );
 

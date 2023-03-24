@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: azure/docker-login@v1
         with:
-          login-server: notes.azurecr.io
+          login-server: noteopxacr.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build -t notes.azurecr.io/api-gateway:${{ github.sha }} .
-          docker push notes.azurecr.io/api-gateway:${{ github.sha }}
+          docker build -t noteopxacr.azurecr.io/backend/api-gateway:${{ github.sha }} .
+          docker push noteopxacr.azurecr.io/backend/api-gateway:${{ github.sha }}
