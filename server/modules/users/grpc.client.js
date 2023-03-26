@@ -1,6 +1,9 @@
+import { join, resolve } from 'path';
+require('dotenv').config({
+  path: resolve(__dirname, '..', '..', '..', '.env'),
+});
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
-import { join } from 'path';
 
 // const PROTO_PATH = path.join(
 //   __dirname,
@@ -21,7 +24,7 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const userProto = grpc.loadPackageDefinition(packageDefinition).user;
 const client = new userProto.UserService(
-  'api2:30001',
+  process.env.USER_SERVICE,
   grpc.credentials.createInsecure()
 );
 
