@@ -7,7 +7,7 @@ import express, { json, urlencoded } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import router from './routes/v1';
-import { logger } from './helper';
+// import { logger } from './helper';
 import HttpError from './helper/httpError';
 
 const PORT = Number(process.env.PORT) || 30000;
@@ -22,9 +22,9 @@ app.options('*', cors());
 app.use(json({ limit: '50mb' }));
 app.use(urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan('combined', { stream: logger.stream }));
-}
+// if (process.env.NODE_ENV !== 'test') {
+//   app.use(morgan('combined', { stream: logger.stream }));
+// }
 
 // Remove some header info
 app.disable('x-powered-by');
@@ -56,6 +56,6 @@ app.use('*', (request, response) => {
   response.status(404).send({ success: false, error: 'Path not found' });
 });
 
-app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
+app.listen(PORT, () => console.info(`Server started on port ${PORT}`));
 
 export default app;
