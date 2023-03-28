@@ -31,7 +31,7 @@ app.disable('x-powered-by');
 
 // Handle Errors
 app.use((err, req, res, next) => {
-  logger.error(
+  console.error(
     `${err.status || 500} - ${err.message} - ${req.originalUrl} - ${
       req.method
     } - ${req.ip}`

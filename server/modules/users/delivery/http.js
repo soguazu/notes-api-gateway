@@ -15,7 +15,7 @@ const signup = async function (req, res, next) {
       password: Joi.string().min(8).required(),
       role: Joi.string()
         .valid('OPERATOR', 'LINE_SUPERINTENDENT', 'UNIT_SUPERINTENDENT')
-        .required(),
+        .optional(),
       license: Joi.string()
         .uuid({ version: ['uuidv4'] })
         .required(),
