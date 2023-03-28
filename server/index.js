@@ -29,6 +29,16 @@ app.use(urlencoded({ extended: true }));
 // Remove some header info
 app.disable('x-powered-by');
 
+app.get('/', (request, response) => {
+  response.status(200).send('Welcome to Cocoons Letters Limited');
+});
+
+router(app, '/v1/');
+
+app.use('*', (request, response) => {
+  response.status(404).send({ success: false, error: 'Path not found' });
+});
+
 // Handle Errors
 app.use((err, req, res, next) => {
   console.error(
@@ -44,16 +54,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, error: 'An error occurred' });
 
   next();
-});
-
-app.get('/', (request, response) => {
-  response.status(200).send('Welcome to Cocoons Letters Limited');
-});
-
-router(app, '/v1/');
-
-app.use('*', (request, response) => {
-  response.status(404).send({ success: false, error: 'Path not found' });
 });
 
 app.listen(PORT, () => console.info(`Server started on port ${PORT}`));

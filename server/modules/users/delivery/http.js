@@ -34,6 +34,7 @@ const signup = async function (req, res, next) {
       data,
     });
   } catch (error) {
+    // console.log(error, '*****');
     next(error);
   }
 };

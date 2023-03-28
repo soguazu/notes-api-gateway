@@ -1,8 +1,8 @@
 class HttpError extends Error {
   constructor(status, message, data) {
     super(message);
-    this.message = message
-    this.name = "HttpError";
+    this.message = message;
+    this.name = 'HttpError';
     this.status = status;
     this.data = data;
   }
@@ -10,7 +10,7 @@ class HttpError extends Error {
   getErrorResponse(res) {
     let respObj = {
       success: false,
-      error: this.message
+      error: this.message,
     };
     if (this.data) {
       respObj['data'] = this.data;
