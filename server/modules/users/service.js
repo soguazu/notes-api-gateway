@@ -1,5 +1,6 @@
 import client from './grpc.client';
 import HttpError from '../../helper/httpError';
+import { publishToQueue } from '../../helper/rabbitmq';
 
 export const signup = async function (userData) {
   try {
@@ -10,6 +11,11 @@ export const signup = async function (userData) {
         }
         resolve(user);
       });
+    });
+    await publishToQueue('verify-email', {
+      email: user.email,
+      first_name: user.name,
+      link_url: `${process.env.CLIENT_URL}/verify-email?token=${user.token}}`,
     });
     return user;
   } catch (error) {
@@ -69,6 +75,12 @@ export const resendVerificationEmail = async function (email) {
       });
     });
 
+    await publishToQueue('verify-email', {
+      email: user.email,
+      first_name: user.name,
+      link_url: `${process.env.CLIENT_URL}/verify-email?token=${user.token}}`,
+    });
+
     return user;
   } catch (error) {
     if (error?.message?.includes('not found')) {
@@ -87,6 +99,12 @@ export const forgotPassword = async function (email) {
         resolve(user);
       });
     });
+
+    await publishToQueue('verify-email', {
+      email: user.email,
+      first_name: user.name,
+      link_url: `${process.env.CLIENT_URL}/verify-email?token=${user.token}}`,
+    });
   } catch (error) {
     if (error?.message?.includes('not found')) {
       throw new HttpError(404, "Email provided isn't registered.");
@@ -103,6 +121,10 @@ export const resetPassword = async function (token, password) {
         }
         resolve(user);
       });
+    });
+    await publishToQueue('verify-email', {
+      email: user.email,
+      first_name: user.name,
     });
     return user;
   } catch (error) {
