@@ -61,7 +61,6 @@ export const verifyEmail = async function (token) {
     } else {
       throw new HttpError(400, 'Invalid token provided');
     }
-    throw error;
   }
 };
 export const resendVerificationEmail = async function (email) {
@@ -100,7 +99,7 @@ export const forgotPassword = async function (email) {
       });
     });
 
-    await publishToQueue('verify-email', {
+    await publishToQueue('reset-password', {
       email: user.email,
       first_name: user.name,
       link_url: `${process.env.CLIENT_URL}/verify-email?token=${user.token}}`,
@@ -122,7 +121,7 @@ export const resetPassword = async function (token, password) {
         resolve(user);
       });
     });
-    await publishToQueue('verify-email', {
+    await publishToQueue('reset-password-successful', {
       email: user.email,
       first_name: user.name,
     });

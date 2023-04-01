@@ -8,7 +8,8 @@ amqp.connect(CONN_URL, function (err, conn) {
   });
 });
 export const publishToQueue = async (queueName, data) => {
-  ch.sendToQueue(queueName, new Buffer(data));
+  await ch.assertQueue(queueName, { durable: false });
+  await ch.sendToQueue(queueName, Buffer.from(JSON.stringify(data)));
 };
 
 process.on('exit', (code) => {
