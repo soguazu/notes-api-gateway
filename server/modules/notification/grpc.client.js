@@ -1,6 +1,6 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
-import path from 'path';
+import { join } from 'path';
 
 // const PROTO_PATH = path.join(
 //   __dirname,
