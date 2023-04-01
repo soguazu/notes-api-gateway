@@ -1,4 +1,4 @@
-import amqp from 'amqplib/callback_api';
+import * as amqp from 'amqplib/callback_api';
 
 const CONN_URL = process.env.RABBITMQ_SERVICE;
 let ch = null;
