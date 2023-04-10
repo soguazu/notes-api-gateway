@@ -51,7 +51,9 @@ app.use((err, req, res, next) => {
     return err.getErrorResponse(res);
   }
 
-  res.status(500).json({ success: false, error: 'An error occurred' });
+  res
+    .status(500)
+    .json({ success: false, error: err?.message || 'An error occurred' });
 
   next();
 });

@@ -14,6 +14,12 @@ async function validateAdminToken(req, res, next) {
     // const user = (
     //   await UserRepository.getWorkspaceUser(decoded.id, decoded.workspace)
     // ).toJSON();
+    // req.user = user;
+
+    const user = {
+      id: decoded.id,
+      companyId: decoded.company,
+    };
 
     req.user = user;
     next();

@@ -25,7 +25,7 @@ const signup = async function (req, res, next) {
       pictureUrl: Joi.string().uri().optional(),
     });
 
-    const data = await service.signup(inputData); 
+    const data = await service.signup(inputData);
 
     res.json({
       success: true,
@@ -34,7 +34,6 @@ const signup = async function (req, res, next) {
       data,
     });
   } catch (error) {
-    // console.log(error, '*****');
     next(error);
   }
 };
