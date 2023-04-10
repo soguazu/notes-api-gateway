@@ -104,7 +104,7 @@ export const getSignedUrl = async function (filename) {
       containerName: container,
       blobName: filename,
       expiresOn: expiryDate,
-      permissions: BlobSASPermissions.parse('racwd'),
+      permissions: BlobSASPermissions.parse('racw'),
     },
     sharedKeyCredential
   );
