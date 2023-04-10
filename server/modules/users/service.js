@@ -40,6 +40,8 @@ export const login = async function (userData) {
   } catch (error) {
     if (error?.message?.includes('wrong email or password')) {
       throw new HttpError(401, 'You have entered a wrong email or password.');
+    } else if (error?.message?.includes('not found')) {
+      throw new HttpError(401, 'You have entered a wrong email or password.');
     }
     throw error;
   }
