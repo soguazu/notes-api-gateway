@@ -1,9 +1,25 @@
 import * as uuid from 'uuid';
 import Joi from 'joi';
+const mongoose = require('mongoose');
+
 import HttpError from '../helper/httpError';
 
 const routeValidateUUID = function (req, res, next) {
-  if (ObjectId(req.params.id)) {
+  console.log(req.params.id);
+  if (UUID(req.params.id)) {
+    next();
+  } else {
+    console.log('ends here');
+    throw new HttpError(404, 'Not found');
+  }
+};
+
+const UUID = function (objectId) {
+  return uuid.validate(objectId);
+};
+
+const routeValidateObjectId = function (req, res, next) {
+  if (exports.ObjectId(req.params.id)) {
     next();
   } else {
     throw new HttpError(404, 'Not found');
@@ -11,7 +27,7 @@ const routeValidateUUID = function (req, res, next) {
 };
 
 const ObjectId = function (objectId) {
-  return uuid.validate(objectId);
+  return mongoose.Types.ObjectId.isValid(objectId);
 };
 
 const validateRequest = function (req, rules) {
@@ -29,10 +45,10 @@ const getPaginationValidationProps = function (
   };
 
   if (shouldIncludeSort) {
-    props.sortBy = Joi.string()
+    props.sortField = Joi.string()
       .optional()
       .valid(...sortFields);
-    props.sortType = Joi.string().optional().valid('asc', 'desc');
+    props.sortOrder = Joi.string().optional().valid('asc', 'desc');
   }
 
   return props;
@@ -114,4 +130,5 @@ export {
   getFilter,
   filterFieldObj,
   validateRequestWithCustomSchema,
+  routeValidateObjectId,
 };
