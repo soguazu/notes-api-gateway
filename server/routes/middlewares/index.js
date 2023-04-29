@@ -11,16 +11,11 @@ async function validateAdminToken(req, res, next) {
     const token = req.headers.authorization.substr(7);
     const decoded = jwt.verify(token, process.env.JWT_TOKEN);
 
-    // const user = (
-    //   await UserRepository.getWorkspaceUser(decoded.id, decoded.workspace)
-    // ).toJSON();
-    // req.user = user;
-
     const user = {
       id: decoded.id,
       companyId: decoded.company,
+      email: Buffer.from(decoded.address, 'base64').toString('ascii'),
     };
-
     req.user = user;
     next();
   } catch (error) {
