@@ -1,16 +1,11 @@
+import { resolve } from 'path';
+require('dotenv').config({
+  path: resolve(__dirname, '..', '..', '..', '.env'),
+});
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
-import { join } from 'path';
 
-// const PROTO_PATH = path.join(
-//   __dirname,
-//   '..',
-//   '..',
-//   '..',
-//   '/notes-protos-nodejs/notification/notification.proto'
-// );
-
-const PROTO_PATH = join(__dirname, './notification.proto');
+const PROTO_PATH = `${process.env.PROTO_PATH}/notification/notification.proto`;
 
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,

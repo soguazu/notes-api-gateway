@@ -1,4 +1,4 @@
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 require('dotenv').config({
   path: resolve(__dirname, '..', '..', '..', '.env'),
 });
