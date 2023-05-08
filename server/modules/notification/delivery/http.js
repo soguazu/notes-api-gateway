@@ -33,8 +33,47 @@ const getAllNotification = async function (req, res, next) {
   }
 };
 
+const deviceRegistration = async function (req, res, next) {
+  try {
+
+    const data = await service.createDeviceRegistration(req.user.id, req.body.deviceToken);
+
+    res.json({ success: true, data});
+    
+  } catch (error) {
+    next(error);
+  }
+}
+
+const subscribe = async function (req, res, next) {
+  try {
+
+    const data = await service.subscribeDevice(req.body.deviceToken, req.body.topic);
+
+    res.json({ success: true, data});
+    
+  } catch (error) {
+    next(error);
+  }
+}
+
+const Unsubscribe = async function (req, res, next) {
+  try {
+
+    const data = await service.UnSubscribeDevice(req.body.topic);
+
+    res.json({ success: true, data});
+    
+  } catch (error) {
+    next(error);
+  }
+}
+
 
 export {
   getNotification,
-  getAllNotification
+  getAllNotification,
+  deviceRegistration,
+  subscribe,
+  Unsubscribe
 };
