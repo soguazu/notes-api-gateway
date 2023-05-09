@@ -10,10 +10,12 @@ import {
   forgotPassword,
   resetPassword,
   updatePassword,
+  tryApp,
 } from '../../modules/users/delivery/http';
 
 const router = express.Router();
 
+router.post('/auth/try', tryApp);
 router.post('/auth/signup', signup);
 router.post('/auth/login', login);
 router.post('/auth/verify-email', verifyEmail);

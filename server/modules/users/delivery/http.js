@@ -7,6 +7,32 @@ import {
 import * as service from '../service';
 import HttpError from '../../../helper/httpError';
 
+const tryApp = async function (req, res, next) {
+  try {
+    const inputData = validateRequest(req, {
+      name: Joi.string().required(),
+      email: Joi.string().email({ minDomainSegments: 2 }).required(),
+      password: Joi.string().min(8).required(),
+      companyName: Joi.string().required(),
+      companySize: Joi.number().optional(),
+      billingAddress: Joi.string().optional(),
+      reason: Joi.string().optional(),
+      industry: Joi.string().optional(),
+    });
+
+    const data = await service.tryApp(inputData);
+
+    res.json({
+      success: true,
+      message:
+        'Registration successful. Check your email to verify your account.',
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const signup = async function (req, res, next) {
   try {
     const inputData = validateRequest(req, {
@@ -142,4 +168,5 @@ export {
   resetPassword,
   updatePassword,
   updateCompanyUser,
+  tryApp,
 };

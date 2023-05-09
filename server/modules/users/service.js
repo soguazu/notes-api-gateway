@@ -2,6 +2,30 @@ import client from './grpc.client';
 import HttpError from '../../helper/httpError';
 import { publishToQueue } from '../../helper/rabbitmq';
 
+export const tryApp = async function (userData) {
+  try {
+    const user = await new Promise((resolve, reject) => {
+      client.tryApp(userData, (err, user) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(user);
+      });
+    });
+    await publishToQueue('verify-email', {
+      email: user.email,
+      first_name: user.name,
+      link_url: `${process.env.CLIENT_URL}/verify-email?token=${user.token}}`,
+    });
+    return user;
+  } catch (error) {
+    if (error?.message?.includes('unique')) {
+      throw new HttpError(409, 'user or company already exists');
+    }
+    throw error;
+  }
+};
+
 export const signup = async function (userData) {
   try {
     const user = await new Promise((resolve, reject) => {
